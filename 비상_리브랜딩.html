@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비상교육 - AI 기반 교육 혁신</title>
+    
+    <!-- SUITE 폰트 CDN -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           전역 변수 및 기본 설정
+           ============================================ */
+        :root {
+            /* 라이트 모드 컬러 */
+            --primary-color: #00B5E2;
+            --primary-light: #33C4E8;
+            --primary-dark: #0094C2;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F7FA;
+            --bg-glass: rgba(255, 255, 255, 0.1);
+            --bg-glass-hover: rgba(255, 255, 255, 0.2);
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --text-light: #999999;
+            --border-color: rgba(0, 181, 226, 0.2);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+            --shadow-glow: 0 0 20px rgba(0, 181, 226, 0.3);
+        }
+
+        [data-theme="dark"] {
+            /* 다크 모드 컬러 */
+            --primary-color: #00B5E2;
+            --primary-light: #33C4E8;
+            --primary-dark: #0094C2;
+            --bg-primary: #0A0A0F;
+            --bg-secondary: #151520;
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --bg-glass-hover: rgba(255, 255, 255, 0.1);
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --text-light: #808080;
+            --border-color: rgba(0, 181, 226, 0.3);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 30px rgba(0, 181, 226, 0.4);
+        }
+
+        /* ============================================
+           기본 리셋 및 타이포그래피
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           헤더 및 네비게이션
+           ============================================ */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+            object-position: left center;
+            display: block;
+            max-width: 200px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: transparent;
+            backdrop-filter: none;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            font-family: inherit;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass-hover);
+        }
+
+        .nav-tab.active {
+            color: var(--primary-color);
+            background: var(--bg-glass-hover);
+            font-weight: 600;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* 다크모드 토글 스위치 */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 18px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle::after {
+            content: '🌙';
+            position: absolute;
+            right: 4px;
+            font-size: 18px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            z-index: 3;
+        }
+
+        [data-theme="dark"] .theme-toggle .toggle-slider {
+            transform: translateX(30px);
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] .theme-toggle::after {
+            opacity: 0.3;
+        }
+
+        /* ============================================
+           메인 컨텐츠 영역
+           ============================================ */
+        .main-content {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================
+           페이지 1: 비상교육 메인 페이지
+           ============================================ */
+        
+        /* 메인 상단 배너 (슬로건) */
+        .hero-banner {
+            position: relative;
+            width: 100%;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, 
+                rgba(0, 181, 226, 0.1) 0%, 
+                rgba(0, 181, 226, 0.05) 50%,
+                rgba(255, 255, 255, 0) 100%);
+            padding: 3rem 2rem;
+            overflow: visible;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-30px, -30px) rotate(180deg); }
+        }
+
+        /* 왼쪽 영역: Hello + 스크롤 이름 + Nice to Meet you */
+        .hero-left {
+            position: absolute;
+            right: calc(50% + 350px); /* 오른쪽 영역 중앙(50%) + 오른쪽 영역 너비 절반(300px) + 간격(100px) */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            z-index: 10;
+            opacity: 1;
+            visibility: visible;
+            width: auto;
+        }
+
+        .hero-greeting {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        /* 스크롤되는 이름 리스트 */
+        .name-scroll-container {
+            position: relative;
+            height: 80px;
+            overflow: hidden;
+            margin: 1rem 0;
+            width: 100%;
+        }
+
+        .name-scroll {
+            display: flex;
+            flex-direction: column;
+            animation: scrollNames 20s linear infinite;
+            will-change: transform;
+        }
+
+        .name-scroll-item {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #00B5E2;
+            line-height: 80px;
+            height: 80px;
+            white-space: nowrap;
+        }
+
+        @keyframes scrollNames {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-2000px); /* 25개 이름 * 80px (20개 + 5개 복제) */
+            }
+        }
+
+        .hero-greeting-end {
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            line-height: 1.4;
+        }
+
+        /* 오른쪽 영역: VISANG + 슬로건 - 사이트 중앙에 배치 */
+        .hero-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 10;
+            /* 페이지 로드 시 즉시 보이도록 명시 */
+            opacity: 1;
+            visibility: visible;
+            /* transform 초기값 명시하여 레이아웃 문제 방지 */
+            transform: translateZ(0);
+            width: auto;
+            max-width: 600px;
+        }
+
+        /* VISANG 로고 텍스트 - 페이지 로드 시 즉시 보이도록 설정 */
+        .hero-logo {
+            font-size: 5.3rem;
+            font-weight: 900;
+            /* HTML 기준 #00B5E2 색상 적용 */
+            color: #00B5E2;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            gap: 0.1em;
+            position: relative;
+            z-index: 10;
+            /* 페이지 로드 시 즉시 보이도록 초기 상태 명시 */
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            /* 애니메이션 전후 상태 유지 (both = forwards + backwards) */
+            animation: fadeInFloat 1.2s ease-out both;
+        }
+
+        .hero-logo span {
+            display: inline-block;
+            /* floating 애니메이션은 즉시 시작하되, fadeInFloat 완료 후 시작 */
+            animation: floatLetter 3s ease-in-out infinite 1.2s;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            color: inherit;
+        }
+
+        .hero-logo span:nth-child(1) {
+            animation-delay: 1.2s;
+        }
+
+        .hero-logo span:nth-child(2) {
+            animation-delay: 1.4s;
+        }
+
+        .hero-logo span:nth-child(3) {
+            animation-delay: 1.6s;
+        }
+
+        .hero-logo span:nth-child(4) {
+            animation-delay: 1.8s;
+        }
+
+        .hero-logo span:nth-child(5) {
+            animation-delay: 2.0s;
+        }
+
+        .hero-logo span:nth-child(6) {
+            animation-delay: 2.2s;
+        }
+
+        /* 페이지 로드 시 즉시 보이도록 초기 상태를 유지하고, fade-in 효과만 적용 */
+        @keyframes fadeInFloat {
+            0% {
+                /* 초기 상태: 약간 투명하지만 보이도록 설정 (완전히 0이 아닌 0.3) */
+                opacity: 0.3;
+                transform: translateY(20px);
+            }
+            100% {
+                /* 최종 상태: 완전히 보이고 원래 위치 */
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating 애니메이션 - 각 글자가 상하로 움직임 */
+        @keyframes floatLetter {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .hero-slogan {
+            font-size: 1.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 10;
+            /* 페이지 로드 시 즉시 보이도록 초기 상태 명시 */
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            /* 애니메이션 전후 상태 유지 */
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .hero-slogan strong {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .hero-slogan-en {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 300;
+            font-style: italic;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+            position: relative;
+            z-index: 10;
+            /* 페이지 로드 시 즉시 보이도록 초기 상태 명시 */
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            /* 애니메이션 전후 상태 유지 */
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        /* fadeInUp 애니메이션: 초기 상태를 약간 투명하게 하여 자연스러운 등장 효과 */
+        @keyframes fadeInUp {
+            0% {
+                /* 초기 상태: 약간 투명하지만 보이도록 설정 */
+                opacity: 0.3;
+                transform: translateY(15px);
+            }
+            100% {
+                /* 최종 상태: 완전히 보이고 원래 위치 */
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 비상교육 홍보 영상 섹션 */
+        .video-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .section-title span {
+            color: var(--primary-color);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow-lg);
+            transform: perspective(1000px) rotateX(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .video-container:hover {
+            transform: perspective(1000px) rotateX(2deg) translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .main-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #000;
+        }
+
+        /* 비상교육 소개 섹션 */
+        .intro-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .intro-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .intro-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .intro-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .intro-card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .intro-card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .intro-card-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* ============================================
+           페이지 2: 비상교육 with AI
+           ============================================ */
+        .ai-products {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--primary-color);
+        }
+
+        .product-thumbnail {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 비율 */
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            overflow: hidden;
+        }
+
+        .product-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-thumbnail img {
+            transform: scale(1.1);
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .product-card:hover .play-button {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .play-button::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 20px solid var(--primary-color);
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 4px;
+        }
+
+        .product-info {
+            padding: 2rem;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .product-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* 비디오 모달 */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .video-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-modal-close:hover {
+            background: rgba(0, 0, 0, 0.7);
+            transform: rotate(90deg);
+        }
+
+        .video-modal video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ============================================
+           반응형 디자인
+           ============================================ */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .nav-tabs {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+            }
+
+            .hero-banner {
+                min-height: 350px;
+                padding: 2rem 1rem;
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .hero-left {
+                position: relative;
+                left: auto;
+                transform: none;
+                margin-right: 0;
+                width: 100%;
+            }
+
+            .hero-content {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .hero-greeting {
+                font-size: 2rem;
+            }
+
+            .name-scroll-item {
+                font-size: 2.5rem;
+            }
+
+            .hero-greeting-end {
+                font-size: 1.5rem;
+            }
+
+            .hero-logo {
+                font-size: 3.3rem;
+                z-index: 10;
+            }
+
+            .hero-slogan {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .video-showcase,
+            .intro-section,
+            .ai-products {
+                padding: 2rem 1rem;
+            }
+
+            .intro-grid,
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .intro-card,
+            .product-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-logo {
+                font-size: 2.7rem;
+                z-index: 10;
+            }
+
+            .hero-slogan {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         헤더 및 네비게이션
+         ============================================ -->
+    <header class="header">
+        <div class="header-content">
+            <!-- 로고 -->
+            <a href="#" class="logo">
+                <img src="https://englisheye-static.s3.dualstack.ap-northeast-2.amazonaws.com/it2cell/kimsb4/%EB%B9%84%EC%83%81%EA%B5%90%EC%9C%A1.png" alt="VISANG" class="logo-icon">
+            </a>
+
+            <!-- 탭 네비게이션 -->
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-page="page1">비상교육</button>
+                <button class="nav-tab" data-page="page2">비상교육 with AI</button>
+            </nav>
+
+            <!-- 헤더 액션 (다크모드 토글) -->
+            <div class="header-actions">
+                <div class="theme-toggle" id="themeToggle" aria-label="다크모드 토글">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================
+         메인 컨텐츠
+         ============================================ -->
+    <main class="main-content">
+        <!-- 페이지 1: 비상교육 메인 페이지 -->
+        <div id="page1" class="page active">
+            <!-- 메인 상단 배너 (슬로건) -->
+            <section class="hero-banner">
+                <!-- 왼쪽 영역: Hello + 스크롤 이름 + Nice to Meet you -->
+                <div class="hero-left">
+                    <div class="hero-greeting">Hello</div>
+                    <div class="name-scroll-container">
+                        <div class="name-scroll">
+                            <div class="name-scroll-item">민준</div>
+                            <div class="name-scroll-item">서아</div>
+                            <div class="name-scroll-item">예원</div>
+                            <div class="name-scroll-item">서준</div>
+                            <div class="name-scroll-item">지우</div>
+                            <div class="name-scroll-item">도윤</div>
+                            <div class="name-scroll-item">채원</div>
+                            <div class="name-scroll-item">예준</div>
+                            <div class="name-scroll-item">지유</div>
+                            <div class="name-scroll-item">시우</div>
+                            <div class="name-scroll-item">수아</div>
+                            <div class="name-scroll-item">하준</div>
+                            <div class="name-scroll-item">하은</div>
+                            <div class="name-scroll-item">주원</div>
+                            <div class="name-scroll-item">지원</div>
+                            <div class="name-scroll-item">건우</div>
+                            <div class="name-scroll-item">소율</div>
+                            <div class="name-scroll-item">우진</div>
+                            <div class="name-scroll-item">나은</div>
+                            <div class="name-scroll-item">선우</div>
+                            <!-- 무한 스크롤을 위해 복제 -->
+                            <div class="name-scroll-item">민준</div>
+                            <div class="name-scroll-item">서아</div>
+                            <div class="name-scroll-item">예원</div>
+                            <div class="name-scroll-item">서준</div>
+                            <div class="name-scroll-item">지우</div>
+                        </div>
+                    </div>
+                    <div class="hero-greeting-end">Nice to Meet you.</div>
+                </div>
+
+                <!-- 오른쪽 영역: VISANG + 슬로건 -->
+                <div class="hero-content">
+                    <div class="hero-logo">
+                        <span>V</span>
+                        <span>I</span>
+                        <span>S</span>
+                        <span>A</span>
+                        <span>N</span>
+                        <span>G</span>
+                    </div>
+                    <p class="hero-slogan">
+                        <strong>AI</strong>와 함께 평생의 배움을 설계하는 <strong>미래 교육</strong>
+                    </p>
+                    <p class="hero-slogan-en">AI-powered lifelong learning for a deeper future.</p>
+                </div>
+            </section>
+
+            <!-- 비상교육 홍보 영상 -->
+            <section class="video-showcase">
+                <h2 class="section-title">비상교육은 <span>바꿉니다.</span></h2>
+                <div class="video-container">
+                    <video class="main-video" autoplay loop muted playsinline>
+                        <!-- 실사 인물 중심의 교육업계 AI 선도 이미지 영상 - 실제 영상으로 교체 가능 -->
+                        <source src="https://englisheye-static.s3.dualstack.ap-northeast-2.amazonaws.com/it2cell/kimsb4/Flow.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </section>
+
+            <!-- 비상교육 소개 섹션 -->
+            <section class="intro-section">
+                <h2 class="section-title">비상교육은 <span>다릅니다.</span></h2>
+                <div class="intro-grid">
+                    <div class="intro-card">
+                        <div class="intro-card-icon">🚀</div>
+                        <h3 class="intro-card-title">AI 기반 학습 솔루션</h3>
+                        <p class="intro-card-text">
+                            최첨단 AI 기술을 활용하여 개인 맞춤형 학습 경험을 제공합니다. 
+                            아이의 학습 패턴을 분석하고 최적화된 학습 경로를 제시합니다.
+                        </p>
+                    </div>
+                    <div class="intro-card">
+                        <div class="intro-card-icon">🎯</div>
+                        <h3 class="intro-card-title">자기 주도 학습 능력 향상</h3>
+                        <p class="intro-card-text">
+                            단순 암기가 아닌 스스로 생각하고 해결하는 능력을 기릅니다. 
+                            즐거운 학습 환경에서 자연스럽게 학습 습관을 형성합니다.
+                        </p>
+                    </div>
+                    <div class="intro-card">
+                        <div class="intro-card-icon">💡</div>
+                        <h3 class="intro-card-title">믿을 수 있는 교육 전문성</h3>
+                        <p class="intro-card-text">
+                            오랜 교육 출판 경험을 바탕으로 검증된 콘텐츠와 
+                            혁신적인 기술을 결합한 신뢰할 수 있는 교육 서비스를 제공합니다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 페이지 2: 비상교육 with AI -->
+        <div id="page2" class="page">
+            <section class="ai-products">
+                <h2 class="section-title">비상교육은 <span>해냅니다.</span></h2>
+                <div class="products-grid">
+                    <!-- 잉스피 -->
+                    <div class="product-card" data-product="inspee">
+                        <div class="product-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=450&fit=crop" alt="잉스피">
+                            <div class="play-button"></div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">잉스피</h3>
+                            <p class="product-description">
+                                AI 기반 맞춤형 학습 플랫폼으로 개인별 학습 진도를 추적하고 
+                                최적화된 학습 경로를 제시합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 오리원 -->
+                    <div class="product-card" data-product="oriwon">
+                        <div class="product-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=450&fit=crop" alt="오리원">
+                            <div class="play-button"></div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">오리원</h3>
+                            <p class="product-description">
+                                원격 교육 솔루션으로 언제 어디서나 고품질 교육 콘텐츠에 
+                                접근할 수 있는 통합 플랫폼입니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 기출탭탭 -->
+                    <div class="product-card" data-product="gichul">
+                        <div class="product-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=450&fit=crop" alt="기출탭탭">
+                            <div class="play-button"></div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">기출탭탭</h3>
+                            <p class="product-description">
+                                기출 문제 분석 및 풀이 서비스로 효율적인 시험 대비 학습을 
+                                지원하는 AI 기반 문제 풀이 플랫폼입니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 마스터K -->
+                    <div class="product-card" data-product="masterk">
+                        <div class="product-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=450&fit=crop" alt="마스터K">
+                            <div class="play-button"></div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">마스터K</h3>
+                            <p class="product-description">
+                                종합 학습 관리 시스템으로 학습 진도, 성취도, 피드백을 
+                                한눈에 확인할 수 있는 스마트 학습 도구입니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ============================================
+         비디오 모달
+         ============================================ -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <button class="video-modal-close" id="closeModal">&times;</button>
+            <video id="modalVideo" controls>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <!-- ============================================
+         JavaScript
+         ============================================ -->
+    <script>
+        // ============================================
+        // 전역 변수 및 초기화
+        // ============================================
+        
+        // 페이지 로드 시 floating 애니메이션 요소가 즉시 보이도록 강제 설정
+        // 문제 해결: 애니메이션이 시작되기 전에도 요소가 화면에 표시되도록 보장
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroLogo = document.querySelector('.hero-logo');
+            const heroSlogan = document.querySelector('.hero-slogan');
+            const heroSloganEn = document.querySelector('.hero-slogan-en');
+            const heroContent = document.querySelector('.hero-content');
+            const heroLeft = document.querySelector('.hero-left');
+            
+            // 모든 요소가 즉시 보이도록 강제 설정
+            if (heroLogo) {
+                heroLogo.style.opacity = '1';
+                heroLogo.style.visibility = 'visible';
+                heroLogo.style.transform = 'translateY(0)';
+                heroLogo.style.color = '#00B5E2'; // VISANG 텍스트 색상 강제 적용
+            }
+            
+            // 각 글자도 즉시 보이도록 설정
+            const heroLogoSpans = document.querySelectorAll('.hero-logo span');
+            heroLogoSpans.forEach(span => {
+                span.style.opacity = '1';
+                span.style.visibility = 'visible';
+                span.style.transform = 'translateY(0)';
+                span.style.color = '#00B5E2'; // 각 글자 색상 강제 적용
+            });
+            
+            if (heroSlogan) {
+                heroSlogan.style.opacity = '1';
+                heroSlogan.style.visibility = 'visible';
+                heroSlogan.style.transform = 'translateY(0)';
+            }
+            
+            if (heroSloganEn) {
+                heroSloganEn.style.opacity = '1';
+                heroSloganEn.style.visibility = 'visible';
+                heroSloganEn.style.transform = 'translateY(0)';
+            }
+            
+            if (heroContent) {
+                heroContent.style.opacity = '1';
+                heroContent.style.visibility = 'visible';
+            }
+
+            if (heroLeft) {
+                heroLeft.style.opacity = '1';
+                heroLeft.style.visibility = 'visible';
+            }
+        });
+        
+        // 다크모드 상태 관리
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // 저장된 테마 불러오기 또는 기본값 설정
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+
+        // ============================================
+        // 다크모드 토글 기능
+        // ============================================
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // ============================================
+        // 페이지 탭 전환 기능
+        // ============================================
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const pages = document.querySelectorAll('.page');
+
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetPage = tab.getAttribute('data-page');
+                
+                // 모든 탭과 페이지에서 active 클래스 제거
+                navTabs.forEach(t => t.classList.remove('active'));
+                pages.forEach(p => p.classList.remove('active'));
+                
+                // 선택된 탭과 페이지에 active 클래스 추가
+                tab.classList.add('active');
+                document.getElementById(targetPage).classList.add('active');
+                
+                // 페이지 전환 시 스크롤을 맨 위로
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // ============================================
+        // 비디오 모달 기능
+        // ============================================
+        const productCards = document.querySelectorAll('.product-card');
+        const videoModal = document.getElementById('videoModal');
+        const modalVideo = document.getElementById('modalVideo');
+        const closeModal = document.getElementById('closeModal');
+
+        // 각 제품별 비디오 URL (실제 영상으로 교체 가능)
+        const videoUrls = {
+            inspee: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+            oriwon: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+            gichul: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+            masterk: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'
+        };
+
+        // 제품 카드 클릭 시 모달 열기
+        productCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const productId = card.getAttribute('data-product');
+                const videoUrl = videoUrls[productId];
+                
+                if (videoUrl) {
+                    modalVideo.src = videoUrl;
+                    videoModal.classList.add('active');
+                    modalVideo.play();
+                }
+            });
+        });
+
+        // 모달 닫기
+        closeModal.addEventListener('click', () => {
+            videoModal.classList.remove('active');
+            modalVideo.pause();
+            modalVideo.src = '';
+        });
+
+        // 모달 배경 클릭 시 닫기
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) {
+                videoModal.classList.remove('active');
+                modalVideo.pause();
+                modalVideo.src = '';
+            }
+        });
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+                videoModal.classList.remove('active');
+                modalVideo.pause();
+                modalVideo.src = '';
+            }
+        });
+
+        // ============================================
+        // 메인 비디오 자동재생 및 반복재생
+        // ============================================
+        const mainVideo = document.querySelector('.main-video');
+        if (mainVideo) {
+            mainVideo.addEventListener('ended', () => {
+                mainVideo.currentTime = 0;
+                mainVideo.play();
+            });
+        }
+
+        // ============================================
+        // 헤더 스크롤 효과 (선택사항)
+        // ============================================
+        let lastScroll = 0;
+        const header = document.querySelector('.header');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                if (html.getAttribute('data-theme') === 'dark') {
+                    header.style.background = 'rgba(10, 10, 15, 0.95)';
+                }
+            } else {
+                header.style.background = 'var(--bg-glass)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>
